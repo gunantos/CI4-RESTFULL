@@ -48,12 +48,23 @@ abstract class Base extends Controller
 	 */
 	public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
 	{
+		$this->cors();
 		parent::initController($request, $response, $logger);
 		$this->setModel($this->modelName);
 		$this->getConfiguration();
 		if ($https) {
 			force_https();
 		}
+	}
+
+	private function cors() {
+		 header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+        $method = $_SERVER['REQUEST_METHOD'];
+        if ($method == "OPTIONS") {
+            die();
+        }
 	}
 
 	protected function setConfig(String $name, $value, Bool $array = false) {
