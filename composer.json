@@ -36,7 +36,7 @@
 	},
     "support": {
 		"forum": "http://app-kita.com/",
-		"source": "https://github.com/app-kita/CI-Restfull",
+		"source": "https://github.com/gunantos/CI4-RESTFULL",
 		"slack": "app-kita.slack.com"
 	}
 }
