@@ -9,35 +9,14 @@
  */
 
 namespace Appkita\CIRestful;
-
 class Auth {
-    private $path = __DIR__.DIRECTORY_SEPERATOR.'Appkita\Auth';
-    private $class = null;
-    protected $JWT_KEY = '12MlopSLMnouxbqzK&%';
-	protected $JWT_AUD = 'https://app-kita.net';
-	protected $JWT_ISS = 'https://app-kita.com';
-	protected $JWT_TIMEOUT = 3600;
-	protected $JWT_USERNAME = 'email';
-	protected $COLOUMN_USERNAME = 'email';
-	protected $COLOUMN_PASSWORD = 'password';
-	protected $COLOUMN_KEY = 'key';
-	protected $API_KEY = 'X-API-KEY';
-
-    function __construct($config = null) {
-        if (is_array($config)) {
-            $config = (object) $config;
-        }
-        if (!empty($config)){
-            if (is_object($config)) {
-                foreach($config as $key => $value) {
-                    if (isset($this->{$key})) {
-                        $this->{$key} = $value;
-                    }
-                }
-            }
-        }
-        $this->cls = (object)[];
-        $this->autoload();
+    private $allow_auth = [];
+    private $path = '';
+    private $ip = '';
+    function __construct($config = ['allow_auth'=>'', 'path'=>'', 'ip'=>'']) {
+        $this->allow_auth = $config['allow_auth'];
+        $this->path = $config['path'];
+        $this->ip = $config['ip'];
     }
 
     private function ceklogin($class) {
@@ -49,26 +28,15 @@ class Auth {
             });
         }
         $cls = new $class();
-        $cls->init((object)[
-            'JWT_KEY' => $this->JWT_KEY,
-            'JWT_AUD' => $this->JWT_AUD,
-            'JWT_ISS' => $this->JWT_ISS,
-            'JWT_TIMEOUT' => $this->JWT_TIMEOUT,
-            'JWT_USERNAME' => $this->JWT_USERNAME,
-            'COLOUMN_USERNAME' => $this->COLOUMN_USERNAME,
-            'COLOUMN_PASSWORD' => $this->COLOUMN_PASSWORD,
-            'COLOUMN_KEY' => $this->COLOUMN_KEY,
-            'API_KEY' => $this->API_KEY,
-            'userMdl' => $this->userMdl
-        ]);
-        $user = $cls->decode();
+        $user = $cls->decode($this->path, $this->ip);
         if (!$user) {
             return false;
         }
         $this->user = $user;
     }
 
-    private function authentication($auth) {
+    public function cek() {
+        $auth = $this->allow_auth;
         if (!$auth || empty($auth) || (is_array($auth) && sizeof($auth) < 1)) return true;
         if (is_array($auth)) {
             $user = null;
@@ -81,27 +49,16 @@ class Auth {
             if (!empty($user)) {
                 return $user;
             }else {
-                return $this->failerror();
+                return false;
             }
         } else {
             if (!empty(auth)){
                 if ($user = $this->ceklogin($auth)) {
                     return $user;
                 } else {
-                    return $this->failerror();
+                    return false;
                 }
             }
         }
-    }
-
-    private function autoload() {
-        spl_autoload_register(function ($class) {
-            $file = str_replace('\\', DIRECTORY_SEPARATOR, $this->path . DIRECTORY_SEPARATOR.$class).'.php';
-            if (file_exists($file)) {
-                require $file;
-                return true;
-            }
-            return false;
-        });
     }
 }

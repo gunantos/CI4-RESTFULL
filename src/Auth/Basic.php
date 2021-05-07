@@ -8,37 +8,27 @@
  * @desc [Authentication basic]
  */
 
+namespace Appkita\CIRestful\Authentication;
+
+use \Config\Services;
+use \Appkita\CIRestful;
+use \CodeIgniter\API\ResponseTrait;
 class Basic{
-    
-    private $JWT_USERNAME = 'email';
-    private $COLOUMN_USERNAME = 'email';
-    private $COLOUMN_PASSWORD = 'password';
-    private $userMdl= null;
 
-    public function init(object $config) {
-        foreach($config as $key => $value) {
-            if (isset($this->{$key})) {
-                $this->{$key} = $value;
-            }
-        }
-    }
-
-    public function decode() {
+    public function decode(string $path, string $ip) {
         header('Cache-Control: no-cache, must-revalidate, max-age=0');
         $has_supplied_credentials = !(empty($_SERVER['PHP_AUTH_USER']) && empty($_SERVER['PHP_AUTH_PW']));
         if (!$has_supplied_credentials) {
             return false;
         }
+        $mdl = Cek();
         $username = $_SERVER['PHP_AUTH_USER'];
         $password = $_SERVER['PHP_AUTH_PW'];
-            $user = $this->userMdl->asObject()->where($this->COLOUMN_USERNAME, $_SERVER['PHP_AUTH_USER'])->get();
+        $user = $mdl->username($username, $password, $path, $ip);
             if (!$user) {
-                return $this->failerror();
-            }
-            if (password_verify($_SERVER['PHP_AUTH_PW'], $user->{$this->COLOUMN_PASSWORD})) {
-                return $user;
+                return $this->failUnauthorized('Not Authroization');
             } else {
-                return $this->failerror();
+                return $user;
             }
     }
 }

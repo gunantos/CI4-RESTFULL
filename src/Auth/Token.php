@@ -7,9 +7,12 @@
  * @modify date 2021-05-06 12:55:49
  * @desc [Authentication Token JWT]
  */
-use Firebase\JWT\JWT;
-use Config\Services;
 
+namespace Appkita\CIRestful\Authentication;
+use \Firebase\JWT\JWT;
+use \Config\Services;
+use \Appkita\CIRestful;
+use \CodeIgniter\API\ResponseTrait;
 class Token
 {
     private $JWT_KEY = '1klso1LMWnLKLQPzIksx#3';
@@ -18,18 +21,20 @@ class Token
     private $JWT_TIMEOUT = 3600;
     private $JWT_ISS = 'https://app-kita.com';
     private $JWT_AUD = 'https://app-kita.net';
-    private $TOKEN_USERNAME = 'email';
-    private $userMdl= null;
+    private $mdl = null;
 
-    public function init(object $config) {
-        foreach($config as $key => $value) {
-            if (isset($this->{$key})) {
-                $this->{$key} = $value;
-            }
-        }
+    function __construct() {
+        $config = Config('Restfull');
+        $cfg = $config->jwt;
+        $this->JWT_KEY = $config['JWT_KEY'];
+        $this->JWT_USERNAME = $config['JWT_USERNAME'];
+        $this->JWT_TIMEOUT = $config['JWT_TIMEOUT'];
+        $this->JWT_ISS = $config['JWT_ISS'];
+        $this->JWT_AUD = $config['JWT_AUD'];
+        $this->mdl = Cek();
     }
 
-    public function decode() {
+    public function decode(string $path, string $ip) {
         if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
             return false;
         }
@@ -49,15 +54,14 @@ class Token
         }
         
         if ($decodedToken->iss != $this->JWT_ISS|| $decodedToken->aud != $this->JWT_AUD) {
-            return false;
+            return $this->failUnauthorized('Not Authroization');
         }
         if (!isset($decodedToken->{$this->JWT_USERNAME})) {
-             return $this->failerror();
+             return $this->failUnauthorized('Not Authroization');
         }
-        
-        $get = $this->userMdl->asObject()->where($this->COLOUMN_USERNAME, $decodedToken->{$this->JWT_USERNAME})->get();
+        $get = $this->mdl->username($decodedToken->{$this->JWT_USERNAME});
         if ($get) {
-            return $this->failerror();
+          return $this->failUnauthorized('Not Authroization');
         }
         return $get;
     }
@@ -72,7 +76,7 @@ class Token
             'aud' => $this->JWT_AUD,
             'iat' => $issuedAtTime,
             'exp' => $tokenExpiration,
-            $this->TOKEN_USERNAME => $data
+            $this->JWT_USERNAME => $data
         ];
         if (!empty($data)){
             if (\is_array($data)) {

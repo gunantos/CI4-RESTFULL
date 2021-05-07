@@ -7,18 +7,17 @@
  * @modify date 2021-05-06 12:55:49
  * @desc [Authentication digest]
  */
+
+namespace Appkita\CIRestful\Authentication;
+
+use \Config\Services;
+use \Appkita\CIRestful;
+use \CodeIgniter\API\ResponseTrait;
+
 class Digest {
     private $COLOUMN_USERNAME = 'email';
     private $COLOUMN_PASSWORD = 'password';
     private $userMdl= null;
-
-    public function init(object $config) {
-        foreach($config as $key => $value) {
-            if (isset($this->{$key})) {
-                $this->{$key} = $value;
-            }
-        }
-    }
 
     private function http_digest_parse($txt)
     {
@@ -37,7 +36,9 @@ class Digest {
         return $needed_parts ? false : $data;
     }
 
-    public function decode() {
+    public function decode(string $path, string $ip) {
+        $config = Config('Restfull');
+        $mdl = Cek();
         $realm = 'Restricted area';
 
         if (!isset($_SERVER['PHP_AUTH_DIGEST'])) {
@@ -51,15 +52,15 @@ class Digest {
             return false;
         }
 
-        $user = $this->userMdl->asObject()->where($this->COLOUMN_USERNAME, $data['username'])->get();
-        if (!$user || empty($user)) {
-            return $this->failerror();
+        $user = $mdl->username($data['username'], '', $path, $ip);
+        if (!$user) {
+            return $this->failUnauthorized('Not Authroization');
         }
-        $username = $user->{$this->COLOUMN_USERNAME};
+        $username = $user['username'];
         $A2 = md5($_SERVER['REQUEST_METHOD'].':'.$data['uri']);
         $valid_response = md5($username.':'.$data['nonce'].':'.$data['nc'].':'.$data['cnonce'].':'.$data['qop'].':'.$A2);
         if ($data['response'] != $valid_response) {
-             return $this->failerror();
+             return $this->failUnauthorized('Not Authroization');
         }
         return $user;
     }

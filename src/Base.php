@@ -33,12 +33,24 @@ abstract class Base extends Controller
 	protected $https = true;
 	protected $format = 'json';
 
-	abstract protected function setAuth($auth);
-	abstract protected function getAuth();
+	protected function getClientIpAddress()
+  {
+      if (!empty($_SERVER['HTTP_CLIENT_IP']))   //Checking IP From Shared Internet
+      {
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+      }
+      elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))   //To Check IP is Pass From Proxy
+      {
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+      }
+      else
+      {
+        $ip = $_SERVER['REMOTE_ADDR'];
+      }
 
-	protected function getCekFrom() {
-		return strtolower(str_replace(' ', '', $this->auth_cek !== 'database')) ? 'file' : 'database';
-	}
+      return $ip;
+  }
+  	abstract protected function setAuth($auth);
 	/**
 	 * Constructor.
 	 *
@@ -48,12 +60,26 @@ abstract class Base extends Controller
 	 */
 	public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
 	{
+		if ($https) {
+			force_https();
+		}
 		$this->cors();
 		parent::initController($request, $response, $logger);
 		$this->setModel($this->modelName);
-		$this->getConfiguration();
-		if ($https) {
-			force_https();
+		
+		$ipaddress = $this->getIPAddress();
+		$class = $this->router->fetch_class();
+		$function = $this->router->fetch_method();
+		$path = $class.'_'.$function;
+		$authentication = new Auth(
+			[
+				'allow_auth'=>$this->auth,
+				'path'=>$path,
+				'ip'=>$ipaddress
+			]
+		);
+		if ($authentication->cek()){
+			return $this->failUnauthorized('Not Authroization');
 		}
 	}
 
@@ -65,53 +91,6 @@ abstract class Base extends Controller
         if ($method == "OPTIONS") {
             die();
         }
-	}
-
-	protected function setConfig(String $name, $value, Bool $array = false) {
-		if (!empty($name)) {
-			if (isset($this->{$name})) {
-				if ($array) {
-					if (is_string($value)) {
-						$value = [$value];
-					} else if (is_object($value)) {
-						$value = (array) $value;
-					}
-				}
-				$this->{$name} = $value;
-			}
-		}
-		return $this;
-	}
-
-	private function getConfiguration() {
-		$config = config('Restfull');
-		foreach($config as $key => $value) {
-			$array = false;
-			if (strtolower($key) == 'auth_type_default') {
-				$array = true;
-				$key = 'auth';
-			}
-			$this->setConfig($key, $value, $array);
-		}
-	}
-
-	protected function failerror($messages  = 'unauthorization', int $status = 401, string $code = null)
-	{
-		if (! is_array($messages))
-		{
-			$messages = ['error' => $messages];
-		}
-
-		$response = [
-			'status'   => $status,
-			'error'    => $code ?? $status,
-			'messages' => $messages,
-		];
-		
-		header('Content-Type: application/json', true, 404);
-		http_response_code(404);
-		die(json_encode($response));
-		exit();
 	}
 
 	/**

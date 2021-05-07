@@ -10,8 +10,8 @@
 
 namespace Appkita\CIRestful;
 
-use CodeIgniter\API\ResponseTrait;
-
+use \CodeIgniter\API\ResponseTrait;
+use \CodeIgniter\HTTP\Request;
 /**
  * An extendable controller to provide a RESTful API for a resource.
  */
@@ -25,33 +25,13 @@ class RestController extends Base
 	 */
 
 	function __construct() {
-		parent::__construct();
-		$this->init();
+		$this->setAuth($this->auth);
 	}
 
-	private function init() {
-		$auth = new Auth((object)
-			[
-				'JWT_KEY' => $this->JWT_KEY,
-				'JWT_AUD' => $this->JWT_AUD,
-				'JWT_ISS' => $this->JWT_ISS,
-				'JWT_TIMEOUT' => $this->JWT_TIMEOUT,
-				'JWT_USERNAME' => $this->JWT_USERNAME,
-				'COLOUMN_USERNAME' => $this->COLOUMN_USERNAME,
-				'COLOUMN_PASSWORD' => $this->COLOUMN_PASSWORD,
-				'COLOUMN_KEY' => $this->COLOUMN_KEY,
-				'API_KEY' => $this->API_KEY,
-				'userMdl' => $this->userMdl
-			]
-		);
-	}
-
-	protected function setAuth($auth) {
+	protected function setAuth($auth){
 		$this->auth = $auth;
 	}
-
-	protected function getAuth() {
-		return $this->auth;
+	private function init() {
 	}
 
 	public function index()

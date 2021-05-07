@@ -6,12 +6,13 @@
     "homepage": "https://app-kita.com/library/ci-restfull",
     "autoload": {
         "psr-4": {
-            "Appkita\\CIRestful\\": "src/"
-        },
-        "classmap": [
-            "database/seeds",
-            "database/factories"
-        ]
+            "Appkita\\CIRestfull\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
     "require": {
         "php": "^7.3||^8.0",
