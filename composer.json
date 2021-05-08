@@ -9,6 +9,15 @@
             "Appkita\\CIRestfull\\": "src/"
         }
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./app",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
