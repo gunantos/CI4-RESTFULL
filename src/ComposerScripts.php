@@ -30,7 +30,19 @@ class ComposerScripts
 	 * @var string
 	 */
 	protected static $basePath = '../app/';
-
+    
+    private function logs($log_msg)
+    {
+        $log_filename = "log";
+        if (!file_exists($log_filename)) 
+        {
+            // create directory/folder uploads.
+            mkdir($log_filename, 0777, true);
+        }
+        $log_file_data = $log_filename.'/log_' . date('d-M-Y') . '.log';
+        // if you don't add `FILE_APPEND`, the file will be erased each time you add a log
+        file_put_contents($log_file_data, $log_msg . "\n", FILE_APPEND);
+    } 
 	/**
 	 * After composer install/update, this is called to move
 	 * the bare-minimum required files for our dependencies
@@ -42,11 +54,20 @@ class ComposerScripts
 	{
         $projectDir = $event->getComposer()->getConfig()->get('archive-dir');
         self::createConfigCI($folder);
-        self::createConfigCI('../../app');
+        self::createConfigCI('../../../app');
 	}
 
+    
+	public static function postPackageInstall(PackageEvent $event)
+    {
+        $installedPackage = $event->getOperation()->getPackage();
+        return self::createConfigCI('../../../app');
+        // do stuff
+    }
+
     public static function createConfigCI($folder) {
-        self::copyDir(self::$basePath, $folder);
+        self::logs('Copy folder '. self::$basePath .' to '. $folder);
+        return self::copyDir(self::$basePath, $folder);
     }
 	//--------------------------------------------------------------------
 

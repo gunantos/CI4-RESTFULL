@@ -31,10 +31,13 @@
         }
     ],
 	"scripts": {
-        "post-create-project-cmd": [
-            "Appkita\\Restful\\ComposerScripts::postUpdate"
-        ],
         "post-update-cmd": ["Appkita\\Restful\\ComposerScripts::postUpdate"],
+        "post-package-install": ["Appkita\\Restful\\ComposerScripts::postPackageInstall"],
+        "post-create-project-cmd": [
+            "Appkita\\Restful\\ComposerScripts::postUpdate",
+            "php -r \"copy('app/Config/Restfull.php', '../../app/Config/Restfull.php');\"",
+            "php -r \"copy('app/Models/UserModel.php', '../../app/Models/UserModel.php');\""
+        ],
 		"test": "phpunit"
 	},
     "support": {
