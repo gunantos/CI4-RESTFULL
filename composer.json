@@ -1,7 +1,7 @@
 {
     "name": "appkita/ci4-restfull",
     "description": "Library CI4 untuk pembuatan WEB API Restfull dilengkapi dengan Authentication type JWT, KEY, Basic, Digest yang bisa terintegrasi dengan database, memiliki fitur blacklist, whitelist, management api",
-    "type": "project",
+    "type": "library",
     "homepage": "https://app-kita.com/library/ci-restfull",
     "autoload": {
         "psr-4": {
@@ -32,8 +32,9 @@
     ],
 	"scripts": {
         "post-update-cmd": ["Appkita\\Restful\\ComposerScripts::postUpdate"],
-        "post-package-install": ["Appkita\\Restful\\ComposerScripts::postPackageInstall"],
-        "post-create-project-cmd": [
+        "post-install-cmd": ["Appkita\\Restful\\ComposerScripts::postPackageInstall"],
+        "post-package-update": ["Appkita\\Restful\\ComposerScripts::postPackageInstall"],
+        "post-package-install": [
             "Appkita\\Restful\\ComposerScripts::postUpdate",
             "php -r \"copy('app/Config/Restfull.php', '../../app/Config/Restfull.php');\"",
             "php -r \"copy('app/Models/UserModel.php', '../../app/Models/UserModel.php');\""
