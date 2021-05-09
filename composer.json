@@ -1,5 +1,5 @@
 {
-    "name": "appkita/ci4-restfull",
+    "name": "appkita/cirestful",
     "description": "Library CI4 untuk pembuatan WEB API Restfull dilengkapi dengan Authentication type JWT, KEY, Basic, Digest yang bisa terintegrasi dengan database, memiliki fitur blacklist, whitelist, management api",
     "type": "library",
     "homepage": "https://app-kita.com/library/ci-restfull",
