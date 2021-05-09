@@ -8,7 +8,7 @@
  * @desc [Library CI4 untuk pembuatan WEB API Restfull dilengkapi dengan Authentication type JWT, KEY, Basic, Digest yang bisa terintegrasi dengan database, memiliki fitur blacklist, whitelist, management api]
  */
 
-namespace Appkita\CIRestful;
+namespace Appkita\CI4Restful;
 
 use \Codeigniter\Model;
 use \Config\Services;

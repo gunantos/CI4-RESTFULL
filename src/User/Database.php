@@ -1,6 +1,6 @@
 <?php
 
-namespace Appkita\Restful\User;
+namespace Appkita\CI4Restful\User;
 use \Codeigniter\Model;
 
 class Database extends \User {

@@ -8,10 +8,10 @@
  * @desc [Authentication Token JWT]
  */
 
-namespace Appkita\CIRestful\Authentication;
+namespace Appkita\CI4Restful\Authentication;
 use \Firebase\JWT\JWT;
 use \Config\Services;
-use \Appkita\CIRestful;
+use \Appkita\CI4Restful;
 use \CodeIgniter\API\ResponseTrait;
 class Token
 {

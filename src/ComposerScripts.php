@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Appkita\CIRestful;
+namespace Appkita\CI4Restful;
 /**
  * ComposerScripts
  *
@@ -21,6 +21,7 @@ namespace Appkita\CIRestful;
  * @codeCoverageIgnore
  */
 use Composer\Script\Event;
+use Composer\Installer\PackageEvent;
 
 class ComposerScripts
 {

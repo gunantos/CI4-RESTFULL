@@ -1,11 +1,11 @@
 {
-    "name": "appkita/cirestful",
+    "name": "appkita/ci4restful",
     "description": "Library CI4 untuk pembuatan WEB API Restfull dilengkapi dengan Authentication type JWT, KEY, Basic, Digest yang bisa terintegrasi dengan database, memiliki fitur blacklist, whitelist, management api",
     "type": "library",
     "homepage": "https://app-kita.com/library/ci-restfull",
     "autoload": {
         "psr-4": {
-            "Appkita\\CIRestfull\\": "src/"
+            "Appkita\\CI4Restful\\": "src/"
         }
     },
     "autoload-dev": {
@@ -31,9 +31,15 @@
         }
     ],
 	"scripts": {
-        "post-update-cmd": ["Appkita\\Restful\\ComposerScripts::postUpdate"],
-        "post-install-cmd": ["Appkita\\Restful\\ComposerScripts::postPackageInstall"],
-        "post-package-update": ["Appkita\\Restful\\ComposerScripts::postPackageInstall"],
+        "post-update-cmd": ["Appkita\\Restful\\ComposerScripts::postUpdate",
+            "php -r \"copy('app/Config/Restfull.php', '../../app/Config/Restfull.php');\"",
+            "php -r \"copy('app/Models/UserModel.php', '../../app/Models/UserModel.php');\""],
+        "post-install-cmd": ["Appkita\\Restful\\ComposerScripts::postPackageInstall",
+            "php -r \"copy('app/Config/Restfull.php', '../../app/Config/Restfull.php');\"",
+            "php -r \"copy('app/Models/UserModel.php', '../../app/Models/UserModel.php');\""],
+        "post-package-update": ["Appkita\\Restful\\ComposerScripts::postPackageInstall",
+            "php -r \"copy('app/Config/Restfull.php', '../../app/Config/Restfull.php');\"",
+            "php -r \"copy('app/Models/UserModel.php', '../../app/Models/UserModel.php');\""],
         "post-package-install": [
             "Appkita\\Restful\\ComposerScripts::postUpdate",
             "php -r \"copy('app/Config/Restfull.php', '../../app/Config/Restfull.php');\"",

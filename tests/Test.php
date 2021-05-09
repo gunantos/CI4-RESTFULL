@@ -1,8 +1,6 @@
 <?php
 use PHPUnit\Framework\TestCase;
-use \Appkita\CIRestful;
-
-class Expample extends \Appkita\CIRestful\RestController {
+class Expample extends \Appkita\CI4Restful\Restfull {
     protected $auth = 'key';
     public function index() {
         echo 'berhasil';

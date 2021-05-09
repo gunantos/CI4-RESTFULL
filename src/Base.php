@@ -8,7 +8,7 @@
  * @desc [Library CI4 untuk pembuatan WEB API Restfull dilengkapi dengan Authentication type JWT, KEY, Basic, Digest yang bisa terintegrasi dengan database, memiliki fitur blacklist, whitelist, management api]
  */
 
-namespace Appkita\CIRestful;
+namespace Appkita\CI4Restful;
 
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\RequestInterface;
@@ -32,6 +32,11 @@ abstract class Base extends Controller
 	protected $auth = ['TOKEN', 'KEY', 'BASIC', 'DIGEST'];
 	protected $https = true;
 	protected $format = 'json';
+
+	protected $_methods= null;
+	protected $_path = null;
+	protected $_url = null;
+	protected $_ip_address = null;
 
 	protected function getClientIpAddress()
   {
@@ -92,7 +97,6 @@ abstract class Base extends Controller
             die();
         }
 	}
-
 	/**
 	 * Set or change the model this controller is bound to.
 	 * Given either the name or the object, determine the other.

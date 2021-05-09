@@ -1,1 +1,1 @@
-C:37:"PHPUnit\Runner\DefaultTestResultCache":113:{a:2:{s:7:"defects";a:1:{s:13:"Testing::test";i:5;}s:5:"times";a:1:{s:13:"Testing::test";d:0.012999999999999999;}}}
+C:37:"PHPUnit\Runner\DefaultTestResultCache":204:{a:2:{s:7:"defects";a:2:{s:13:"Testing::test";i:5;s:32:"Appkita\CI4Restful\Testing::test";i:5;}s:5:"times";a:2:{s:13:"Testing::test";d:0.010999999999999999;s:32:"Appkita\CI4Restful\Testing::test";d:0.01;}}}

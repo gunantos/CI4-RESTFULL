@@ -8,7 +8,7 @@
  * @desc [Authentication basic]
  */
 
-namespace Appkita\CIRestful\Authentication;
+namespace Appkita\CI4Restful\Authentication;
 
 use \Config\Services;
 use \Appkita\CIRestful;

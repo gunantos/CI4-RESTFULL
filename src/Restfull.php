@@ -8,14 +8,13 @@
  * @desc [Library CI4 untuk pembuatan WEB API Restfull dilengkapi dengan Authentication type JWT, KEY, Basic, Digest yang bisa terintegrasi dengan database, memiliki fitur blacklist, whitelist, management api]
  */
 
-namespace Appkita\CIRestful;
+namespace Appkita\CI4Restful;
 
 use \CodeIgniter\API\ResponseTrait;
-use \CodeIgniter\HTTP\Request;
 /**
  * An extendable controller to provide a RESTful API for a resource.
  */
-class RestController extends Base
+class Restfull extends Base
 {
 	use ResponseTrait;
 	/**
@@ -24,16 +23,18 @@ class RestController extends Base
 	 * @return mixed
 	 */
 
+	protected $startTime;
+	private $_call_method = '';
+
 	function __construct() {
+		$this->startTime = \microtime(true);
+		$this->_ip_address = $this->getClientIpAddress();
 		$this->setAuth($this->auth);
 	}
 
 	protected function setAuth($auth){
 		$this->auth = $auth;
 	}
-	private function init() {
-	}
-
 	public function index()
 	{
 		return $this->fail(lang('RESTful.notImplemented', ['index']), 501);

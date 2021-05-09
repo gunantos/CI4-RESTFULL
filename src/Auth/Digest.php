@@ -8,10 +8,10 @@
  * @desc [Authentication digest]
  */
 
-namespace Appkita\CIRestful\Authentication;
+namespace Appkita\CI4Restful\Authentication;
 
 use \Config\Services;
-use \Appkita\CIRestful;
+use \Appkita\CI4Restful;
 use \CodeIgniter\API\ResponseTrait;
 
 class Digest {

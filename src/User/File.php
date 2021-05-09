@@ -1,6 +1,6 @@
 <?php
 
-namespace Appkita\Restful\User;
+namespace Appkita\CI4Restful\User;
 
 class File extends \User {
     private $mdl = [];
