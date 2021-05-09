@@ -20,6 +20,8 @@ namespace Appkita\CIRestful;
  *
  * @codeCoverageIgnore
  */
+use Composer\Script\Event;
+
 class ComposerScripts
 {
 	/**
@@ -40,9 +42,10 @@ class ComposerScripts
 	{
         $projectDir = $event->getComposer()->getConfig()->get('archive-dir');
         self::createConfigCI($folder);
+        self::createConfigCI('../../app');
 	}
 
-    private static function createConfigCI($folder) {
+    public static function createConfigCI($folder) {
         self::copyDir(self::$basePath, $folder);
     }
 	//--------------------------------------------------------------------
